@@ -72,5 +72,5 @@ def correct_orientation(model, device, img):
     img = torch.from_numpy(img)
     img = img.unsqueeze(0)
     reference_img = img.float()
-
+https://drive.google.com/file/d/1dBZP551vULR4kbxgJXIbsTGevNGmtlqS/view?usp=sharing
 https://drive.google.com/file/d/1hhg5ZibX4GAtoQBEINPzv-_W7AW3CLyA/view?usp=sharing
