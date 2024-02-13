@@ -1,4 +1,5 @@
-def correct_orientation(model, device, img):
+https://drive.google.com/file/d/1Ov2qZLPKHrFvG5MC1M3X54jZQMaEznAi/vie
+wdef correct_orientation(model, device, img):
     """
     This function accepts an image and corrects its orientation using a pre-trained model.
 
