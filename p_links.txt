@@ -1,77 +1,21 @@
-https://drive.google.com/file/d/1Ov2qZLPKHrFvG5MC1M3X54jZQMaEznAi/vie
-wdef correct_orientation(model, device, img):
-    """
-    This function accepts an image and corrects its orientation using a pre-trained model.
+            str_predicted = str(str_predicted)
+            str_predicted = re.sub(" +", " ", str_predicted)
+            str_predicted = re.sub('’', "'", str_predicted)
 
-    Args:
-        model: loaded model
-        device: str, device to run model on
-        img (np.ndarray): The input image as a NumPy array.
-
-    Returns:
-        np.ndarray: The corrected image as a NumPy array.
-    """
-    try:
-        corrected_image = img
-        result = model.predict(input_data=corrected_image)
-        result = next(result)[0]
-
-        initial_label = result['label_names'][0]
-
-        if initial_label == "180":
-            corrected_image = cv2.rotate(corrected_image, cv2.ROTATE_180)
-            result = model.predict(input_data=corrected_image)
-            result = next(result)[0]
-            initial_label = result['label_names'][0]
-
-            if initial_label != "0":
-                corrected_image = cv2.rotate(corrected_image, cv2.ROTATE_180)
-
-        original_out_img = corrected_image.copy()
-
-        if initial_label != "0":
-            if initial_label in ["90", "270"]:
-                corrected_image = cv2.rotate(original_out_img, cv2.ROTATE_90_COUNTERCLOCKWISE)
-                
-                result = model.predict(input_data=corrected_image)
-                result = next(result)[0]
-
-                initial_label = result['label_names'][0]
-
-                if initial_label != "0":
-                    corrected_image = cv2.rotate(original_out_img, cv2.ROTATE_90_CLOCKWISE)
-                    
-                    result = model.predict(input_data=corrected_image)
-                    result = next(result)[0]
-
-                    initial_label = result['label_names'][0]
-                    initial_confidence = result['scores'][0]
-
-        if initial_label != "0":
-            result = model.predict(input_data=original_out_img)
-            result = next(result)[0]
-            initial_label = result['label_names'][1]
+            if len(str_predicted.strip()) != 0:
+                str_predicted = str_predicted.strip()
             
-            if initial_label == "0":
-                corrected_image = original_out_img
+            ours_is_digit = [True if d in ["(",")",".",",","0","1","2","3","4","5","6","7","8","9"] else False for d in str_predicted]
+            if all(ours_is_digit):
+                len_ours = len(str_predicted)
+                new_ours = ""
+                for index, c in enumerate(str_predicted):
+                    # print(len_ours-index, c)
+                    if len_ours - index > 5 and c==".":
+                        new_ours += ","
+                    else:
+                        new_ours += c
+                str_predicted = new_ours
 
-    except Exception as e:
-        raise Exception(f"Error processing: {str(e)}")
-
-    return corrected_image
-
-    # reference_img = preprocess_image(original_reference_img)
-    img = np.ones((1024, 1024, 3)) * 255
-    dx = 50
-    dy = 50
-    grid_color = [0, 0, 0]
-
-    img[::dy, :, :] = grid_color
-    img[:, ::dx, :] = grid_color
-    img = 1 - img/255
-    img = img.transpose(2, 0, 1)
-    img = torch.from_numpy(img)
-    img = img.unsqueeze(0)
-    reference_img = img.float()
-https://drive.google.com/file/d/1dBZP551vULR4kbxgJXIbsTGevNGmtlqS/view?usp=sharing
-https://drive.google.com/file/d/1hhg5ZibX4GAtoQBEINPzv-_W7AW3CLyA/view?usp=sharing
+            if all(char.isdigit() or char in [",","(",")","."] for char in str_predicted):
+                    str_predicted = str_predicted.replace(',', '')    
