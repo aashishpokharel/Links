@@ -1,21 +1,2 @@
-            str_predicted = str(str_predicted)
-            str_predicted = re.sub(" +", " ", str_predicted)
-            str_predicted = re.sub('’', "'", str_predicted)
-
-            if len(str_predicted.strip()) != 0:
-                str_predicted = str_predicted.strip()
-            
-            ours_is_digit = [True if d in ["(",")",".",",","0","1","2","3","4","5","6","7","8","9"] else False for d in str_predicted]
-            if all(ours_is_digit):
-                len_ours = len(str_predicted)
-                new_ours = ""
-                for index, c in enumerate(str_predicted):
-                    # print(len_ours-index, c)
-                    if len_ours - index > 5 and c==".":
-                        new_ours += ","
-                    else:
-                        new_ours += c
-                str_predicted = new_ours
-
-            if all(char.isdigit() or char in [",","(",")","."] for char in str_predicted):
-                    str_predicted = str_predicted.replace(',', '')    
+/mnt/gime-extract/global_ime/data/Shiva/A2EPM-001_A.pdf
+/mnt/gime-extract/global_ime/data/shiva_run_feb_19
