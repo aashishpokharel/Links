@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 https://gimebank.sharepoint.com/sites/DigitalBanking656/_layouts/15/guestaccess.aspx?e=4%3aWTMi0d&at=9&share=EVg9U2F6ElpJvcpDOsY1344BHgsUW4B_NuIwy1YKqIWeJw
 
+=======
+/mnt/gime-extract/global_ime/data/Shiva/A2EPM-001_A.pdf
+/mnt/gime-extract/global_ime/data/shiva_run_feb_19
+>>>>>>> 7329f88292a9b2c4a522d59a9744ae6a03f03861
