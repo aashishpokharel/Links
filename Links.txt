@@ -2,3 +2,4 @@ AIRBUS SHIVA : https://drive.google.com/file/d/1Eixvzz_v3qtSXkpV3uuBqXh3y8wRmwDn
 LAMBDA INVOICE : https://drive.google.com/file/d/1y4JoBYk8lZ1Ef9Oit8nPY20-ShY0XLg7/view?usp=drive_link
 DATA FOLDER: https://drive.google.com/drive/folders/12TakPT4pt69CuzWyjzuAlJQQWLCSHZno?usp=drive_link
 SHEET_POSTPROCESSING_NOTEBOOK : https://drive.google.com/file/d/18ahJWwZemQh95IhJkV2urHTKEkPJ39Gs/view?usp=sharing
+md.set(thing_classes=['Caption', 'Footnote', 'Formula', 'List-item', 'Pagefooter', 'Page-header', 'Picture', 'Section-header', 'Table', 'Text','Title', 'Handwriting', 'Stamps'])
