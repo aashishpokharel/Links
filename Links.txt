@@ -4,3 +4,29 @@ TSR:
 DCL DATA
 	1. Images: https://drive.google.com/file/d/1Uy-gRaQ8Biv59cvzKMJcWGllipCO8Ofz/view?usp=drive_link
 	2. Annotation : https://drive.google.com/file/d/1VeSMjdCjR5iMUMOi7ONoheAJUxKoUT_C/view?usp=drive_link 
+
+
+import os
+import random
+import csv
+
+# Directory path
+directory = '/path/to/your/directory'
+
+# Get list of files in the directory
+files = os.listdir(directory)
+
+# Randomly select 500 files
+selected_files = random.sample(files, 500)
+
+# CSV file to store the selected filenames
+csv_file = 'selected_files.csv'
+
+# Write selected filenames to CSV
+with open(csv_file, 'w', newline='') as csvfile:
+    csv_writer = csv.writer(csvfile)
+    csv_writer.writerow(['Filename'])
+    for file in selected_files:
+        csv_writer.writerow([file])
+
+print("Selected filenames saved to:", csv_file)
