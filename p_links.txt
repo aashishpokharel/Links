@@ -1,6 +1,8 @@
 
 docker run --rm -it -p 25672:15672 -p 5672:5672 rabbitmq:3-management
 
+export LD_LIBRARY_PATH=$(echo $LD_LIBRARY_PATH | tr ':' '\n' | grep -v '/usr/local/lib64' | tr '\n' ':' | sed 's/:$//')
+
 
 conda activate main-env
 cd  main-entry-point
@@ -30,3 +32,18 @@ python -m src.run
 conda activate doc-extraction
 cd unified_transformer_nepali_htr
 python -m src.run
+
+
+python table/predict_structure.py \
+
+--table_model_dir=./table_structure_tablemaster_infer \
+
+--table_algorithm=TableMaster \
+
+--table_char_dict_path=../ppocr/utils/dict/table_master_structure_dict.txt \
+
+--table_max_len=480 \
+
+--image_dir=/mnt/gime-extract/TSR_experiments/data/croped_image/Table \
+
+--use_gpu True
