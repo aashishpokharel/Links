@@ -4,6 +4,8 @@ TSR:
 DCL DATA
 	1. Images: https://drive.google.com/file/d/1Uy-gRaQ8Biv59cvzKMJcWGllipCO8Ofz/view?usp=drive_link
 	2. Annotation : https://drive.google.com/file/d/1VeSMjdCjR5iMUMOi7ONoheAJUxKoUT_C/view?usp=drive_link 
+TSR MODEL<DEVARSH 3/29> : https://drive.google.com/file/d/1ogC_BugyIVzYAroCW7mBUrHhIyFMT7hj/view?usp=sharing 
+
 
 
 import os
