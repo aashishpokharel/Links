@@ -54,3 +54,14 @@ if debug:
             "page_no": i,
             "text": texts[idx].replace("<p>", "").replace("</p>", "\n").strip()
         })
+
+
+
+if debug:
+        file_name = pdf.split('/')[-1].split(".")[0]
+        df = pd.DataFrame.from_dict(extracted_texts)
+        tables_df_list = [pd.read_csv(f"{OCR_SAVE_DIR}/{SAVE_DIR.split('/')[-1]}/{pdf.split('/')[-1].split('.')[0]}/page-{i}/table_ocr.csv") for i in range(len(self.images))]
+        
+        combined_df_list = [df] + tables_df_list
+        combined_df = pd.concat(combined_df_list, ignore_index=True)
+        combined_df.to_csv(os.path.join(OCR_SAVE_DIR, SAVE_DIR.split('/')[-1], pdf.split('/')[-1].split('.')[0], f"{file_name}.csv"), index=False)
