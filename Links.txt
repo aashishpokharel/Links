@@ -32,3 +32,25 @@ with open(csv_file, 'w', newline='') as csvfile:
         csv_writer.writerow([file])
 
 print("Selected filenames saved to:", csv_file)
+
+
+if debug:
+                    
+    ocr_save_path = f"{OCR_SAVE_DIR}/{SAVE_DIR.split('/')[-1]}/{pdf.split('/')[-1].split('.')[0]}/page-{i}"
+    if not os.path.exists(ocr_save_path):
+        os.makedirs(ocr_save_path, exist_ok=True)
+    
+    bounding_boxes = dit_output.get('jsonData', {}).get('boxes', [])
+    classes = dit_output.get('jsonData', {}).get('classes', []) 
+    texts = dit_output['jsonData']["extracted_text"]
+    for idx, bbox in enumerate(bounding_boxes):
+        if classes[idx] in ["Table", "Picture"]:
+            continue
+        left, top, right, bottom = bbox   
+        image = aligned_image.crop((left,top,right,bottom))
+        image.save(f"{ocr_save_path}/{idx}.jpg")
+        extracted_texts.append({
+            "image": f"page-{i}/{idx}.jpg",
+            "page_no": i,
+            "text": texts[idx].replace("<p>", "").replace("</p>", "\n").strip()
+        })
