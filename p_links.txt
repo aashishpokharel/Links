@@ -1,3 +1,9 @@
+from alignment_model.model import DVQAModel
+from alignment_model.inference import alignment_model_inference, correct_orientation
+from ocr.extract_text_custom_ocr import extract_text_and_update_json
+
+
+
 aligned_images = self.get_aligned(self.images)
             for i, image in enumerate(aligned_images):
 
