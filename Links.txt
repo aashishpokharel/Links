@@ -1,43 +1,49 @@
-import cv2
-import numpy as np
-import torch
-import time 
+def recognize_batch(self, img, table_bbox, tokens=None, out_objects=False, out_cells=False,
+                  out_html=False, out_csv=False, corresponding_pdf=None, current_page=0, x_crop=0, y_crop=70, img_width=0):
+        out_formats = {}
+        if self.str_model is None:
+            print("No structure model loaded.")
+            return out_formats
 
-def destandardize(image, mean=0.5, std=1.0, transpose=False):
-    image = ((image * std) + mean) * 255.
-    image = np.rint(image)
-    image[image > 255] = 255
-    image[image < 0] = 0
+        if not (out_objects or out_cells or out_html or out_csv):
+            print("No output format specified")
+            return out_formats
 
-    if transpose:
-        image = image.transpose((1, 2, 0))
+        # Transform the image how the model expects it
+        img_tensors = [structure_transform(img).to(self.str_device) for img in imgs]
 
-    return image
+        # Run input image through the model
+        outputs_batch = self.str_model(img_tensors)
+        breakpoint()
+        # Post-process detected objects, assign class labels
+        out_formats_batch = []
+        for idx, outputs in enumerate(outputs_batch):
+            objects = outputs_to_objects(outputs, imgs[idx].size, self.str_class_idx2name)
 
+            if out_objects:
+                out_formats['objects'] = objects
+            if not (out_cells or out_html or out_csv):
+                return out_formats
 
-def warp_image(image, homography, target_hw):
-    h, w = target_hw
-    homography = np.linalg.inv(homography)
-    return cv2.warpPerspective(image, homography, dsize=(w, h))
+            # Further process the detected objects so they correspond to a consistent table 
+            tables_structure = objects_to_structures(objects, tokens, self.str_class_thresholds)
 
+            # Enumerate all table cells: grid cells and spanning cells
+            tables_cells = [structure_to_cells(structure, tokens, img, corresponding_pdf, current_page, x_crop, y_crop, img_width)[0] for structure in tables_structure]
+            if out_cells:
+                out_formats['cells'] = tables_cells
+            if not (out_html or out_csv):
+                return out_formats
 
-def normalization(x, max_val, new_max_val):
-    return (x/max_val) * new_max_val
+            # Convert cells to HTML
+            if out_html:
+                tables_htmls = [cells_to_html(cells, table_bbox, x_crop=x_crop, y_crop=y_crop) for cells in tables_cells]
+                out_formats['html'] = tables_htmls
 
-
-def homography_calculation(perspective_field, input_img):
-    perspective_field = perspective_field.reshape(2, -1).T
-    h, w = input_img.shape[2:4]
-    y_grid, x_grid = np.mgrid[0:h, 0:w]
-    point_grid = np.vstack((x_grid.flatten(), y_grid.flatten())).transpose()
-
-    predicted_point_gird = point_grid + perspective_field
-
-    homography_hats = np.zeros((3, 3), dtype=np.float32)
-    start_time = time.time()
-    print("starting calculation")
-    homography, _ =  cv2.findHomography(point_grid, predicted_point_gird, cv2.RANSAC, 5.0)
-    print("cal time", time.time()- start_time)
-    # homography_hats = torch.tensor(homography, dtype=torch.float32, device=input_img.device)
-    homography_hats = homography.astype(np.float32)
-    return homography_hats
+            # Convert cells to CSV, including flattening multi-row column headers to a single row 
+            if out_csv:
+                tables_csvs = [cells_to_csv(cells) for cells in tables_cells]
+                out_formats['csv'] = tables_csvs
+                
+            out_formats_batch.append(out_formats)
+        return out_formats_batch
